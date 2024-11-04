@@ -82,12 +82,66 @@ class hillClimb {
             }
 
             // Delay
-            string wait;
-            cin >> wait;
+            system("pause");
         }
 
-        void sideWays(){
-            
+        void sideWays(int maximumSidewaysMove){
+            // Generate random cube 
+            random_shuffle(this->magiccube.state.begin(), this->magiccube.state.end());
+
+            // Print state awal
+            cout << "State Awal :\n";
+            this->magiccube.printCube();
+
+            // Start timer
+            auto start = high_resolution_clock::now();
+
+            // Fungsi Steepest Ascent
+            int iterasi = 0, counterSideways;
+            vector<int> plot;
+            bool peak = false;
+            plot.push_back(this->magiccube.value);
+            while(!peak){
+                magicCube neighbor = highestValueNeighbor(this->magiccube);
+                if(neighbor.value < this->magiccube.value){
+                    peak = true;
+                } else {
+                    if(neighbor.value == this->magiccube.value){
+                        counterSideways++;
+                    } else {
+                        counterSideways = 0;
+                    }
+                    if(counterSideways == maximumSidewaysMove){
+                        peak = true;
+                    } else {
+                        this->magiccube = neighbor;
+                    }
+                }
+                iterasi++;
+                plot.push_back(this->magiccube.value);
+            }
+
+            // Stop timer
+            auto end = high_resolution_clock::now();
+
+            // Hitung waktu
+            auto duration = duration_cast<milliseconds>(end - start);
+
+            // Print state akhir
+            cout << "State Akhir :\n";
+            this->magiccube.printCube();
+
+            // Print info
+            cout << "Nilai Akhir Objective Function : " << this->magiccube.value << endl;
+            cout << "Durasi : " << duration.count() / 1000.0 << " seconds" << endl;
+            cout << "Banyak Iterasi : " << iterasi << endl;
+
+            for(int i=0;i<=iterasi;i++){
+                cout << "iterasi-" << i << " : " << plot[i] << endl;
+            }
+
+            // Delay
+            system("pause");
         }
 
         void randomRestart(){

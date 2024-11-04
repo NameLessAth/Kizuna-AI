@@ -1,12 +1,12 @@
 #include "hillclimb.hpp"
 
 int main(){
+    system("cls");
     bool exit = false;
-    int input;
+    int input, param;
     hillClimb hillclimb;
     
     while(!exit){
-        system("cls");
         cout << "Algoritma Hill Climb\n1. Steepest Ascent\n2. With Sideways\n3. Random Restart\n4. Stochastic\n5. Exit\nSilahkan pilih algoritma yang diinginkan: ";
         cin >> input;
 
@@ -15,7 +15,9 @@ int main(){
             hillclimb.steepestAscent();
             break;
         case 2:
-            hillclimb.sideWays();
+            cout << "Masukkan maksimum sideways move : ";
+            cin >> param;
+            hillclimb.sideWays(param);
             break;
         case 3:
             hillclimb.randomRestart();

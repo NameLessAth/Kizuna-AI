@@ -12,7 +12,7 @@ private:
     int freqStuck;
 
     double schedule(int t) {
-        return pow(0.85,t-1);
+        return pow(0.6,t-1);
     }
 
 public:
@@ -22,12 +22,7 @@ public:
 		plot.push_back(cube.value);
         for (int t = 1; t <= maxIterations; ++t) {
             temperature = schedule(t);  
-
-            int i = rand() % cube.state.size();
-            int j = rand() % cube.state.size();
-            while (i == j) {
-                j = rand() % cube.state.size(); 
-            }
+            if (temperature <= 0) break;
 
             magicCube successor;
             successor.switchStates(cube.makeRandomNeighborState());
@@ -65,7 +60,7 @@ public:
             auto start = high_resolution_clock::now();
 
             // Fungsi Simulated-Annealing
-			this->run(10000);
+			this->run(1000);
 
             // Stop timer
             auto end = high_resolution_clock::now();

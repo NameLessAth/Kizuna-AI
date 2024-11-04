@@ -25,7 +25,9 @@ int main(){
             hillclimb.randomRestart(param);
             break;
         case 4:
-            hillclimb.stochastic();
+            cout << "Masukkan banyak langkah maksimum : ";
+            cin >> param;
+            hillclimb.stochastic(param);
             break;
         case 5:
             exit = true;

@@ -77,7 +77,7 @@ class hillClimb {
             cout << "Banyak Iterasi : " << iterasi << endl;
 
             for(int i=0;i<=iterasi;i++){
-                cout << "iterasi-" << i << " : " << plot[i] << endl;
+                cout << i << "," << plot[i] << endl;
             }
 
             // Delay
@@ -137,7 +137,7 @@ class hillClimb {
             cout << "Banyak Iterasi : " << iterasi << endl;
 
             for(int i=0;i<=iterasi;i++){
-                cout << "iterasi-" << i << " : " << plot[i] << endl;
+                cout << i << "," << plot[i] << endl;
             }
 
             // Delay
@@ -205,7 +205,7 @@ class hillClimb {
                 cout << "restart-" << i+1 << endl;
                 int j=0;
                 for(int plotting : plot[i]){
-                    cout << "iterasi-" << j << " : " << plotting << endl;
+                    cout << j << "," << plotting << endl;
                     j++;
                 }
             }
@@ -216,7 +216,53 @@ class hillClimb {
             system("pause");
         }
 
-        void stochastic(){
-            
+        void stochastic(int maximumMove){
+            // Generate random cube 
+            random_shuffle(this->magiccube.state.begin(), this->magiccube.state.end());
+            this->magiccube.value = this->magiccube.countValue();
+
+            // Print state awal
+            cout << "State Awal :\n";
+            this->magiccube.printCube();
+
+            // Start timer
+            auto start = high_resolution_clock::now();
+
+            // Fungsi Stochastic
+            int iterasi = 0;
+            vector<int> plot;
+            bool peak = false;
+            plot.push_back(this->magiccube.value);
+            while(maximumMove--){
+                magicCube neighbor = this->magiccube;
+                neighbor.switchStates(this->magiccube.makeRandomNeighborState());
+                if(neighbor.value > this->magiccube.value){
+                    this->magiccube = neighbor;
+                }
+                iterasi++;
+                plot.push_back(this->magiccube.value);
+            }
+
+            // Stop timer
+            auto end = high_resolution_clock::now();
+
+            // Hitung waktu
+            auto duration = duration_cast<milliseconds>(end - start);
+
+            // Print state akhir
+            cout << "State Akhir :\n";
+            this->magiccube.printCube();
+
+            // Print info
+            cout << "Nilai Akhir Objective Function : " << this->magiccube.value << endl;
+            cout << "Durasi : " << duration.count() / 1000.0 << " seconds" << endl;
+            cout << "Banyak Iterasi : " << iterasi << endl;
+
+            for(int i=0;i<=iterasi;i++){
+                cout << i << "," << plot[i] << endl;
+            }
+
+            // Delay
+            system("pause");
         }
 };

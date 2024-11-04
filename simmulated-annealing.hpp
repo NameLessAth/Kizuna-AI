@@ -6,20 +6,19 @@ using namespace std::chrono;
 class SimulatedAnnealing {
 private:
     magicCube cube;   
-    double temperature;     
-	double iterasi; 
+    double temperature;      
 	vector<int> plot;
+    vector<double> plotexp;
+    int freqStuck;
 
     double schedule(int t) {
         return pow(0.85,t-1);
     }
 
 public:
-    SimulatedAnnealing() : temperature(1.0), iterasi(0) {}
+    SimulatedAnnealing() : temperature(1.0), freqStuck(0) {}
 
     void run(int maxIterations) {
-		iterasi = 0;
-		plot.clear();
 		plot.push_back(cube.value);
         for (int t = 1; t <= maxIterations; ++t) {
             temperature = schedule(t);  
@@ -35,22 +34,26 @@ public:
             int deltaE = successor.value - cube.value; 
 
             if (deltaE > 0) {
-                cube = successor; 
+                cube.switchStates(successor.state); 
             } else {
-                double acceptanceProb = exp(deltaE / temperature);
+                freqStuck++;
+                double acceptanceProb;
+                if (temperature <= 0) acceptanceProb = 0;
+                else{
+                    acceptanceProb = exp(deltaE / temperature);
+                    if (acceptanceProb > 1) acceptanceProb = 1;
+                }
+                
+                plotexp.push_back(acceptanceProb);
                 if (((double)rand() / (double)RAND_MAX) < acceptanceProb) {
-                    cube = successor;
+                    cube.switchStates(successor.state);
                 }
             }
-			iterasi++;
 			plot.push_back(cube.value);
         }
     }
 
         void start(){
-            // Generate random cube 
-            random_shuffle(cube.state.begin(), cube.state.end());
-
             // Clear terminal
             system("cls");
 
@@ -77,14 +80,34 @@ public:
             // Print info
             cout << "Nilai Akhir Objective Function : " << this->cube.value << endl;
             cout << "Durasi : " << duration.count() / 1000.0 << " seconds" << endl;
-            cout << "Banyak Iterasi : " << iterasi << endl;
-
-            // Delay
-            string wait;
-            cin >> wait;
+            cout << "Frekuensi Stuck : " << freqStuck << endl;
+            cout << "Plot Objective Function : " << endl; printVectorInt(plot);
+            cout << "Plot exp(deltaE/T) : " << endl; printVectorDouble(plotexp);
         }
 
     void printCurrentState() {
         cube.printCube();
     }
+
+    void printVectorInt(const vector<int>& vec) {
+        for (int i = 0; i < vec.size(); ++i) {
+            cout << vec[i];
+            if (i != vec.size() - 1) {
+                cout << ",";
+            }
+        }
+        cout << endl;
+    }
+
+    void printVectorDouble(const vector<double>& vec) {
+        for (int i = 0; i < vec.size(); ++i) {
+            cout << vec[i];
+            if (i != vec.size() - 1) {
+                cout << ",";
+            }
+        }
+        cout << endl;
+    }
+    
+    
 };

@@ -17,8 +17,9 @@ class geneticAlgorithm {
         int selection();
         vector<vector<int>> crossover(magicCube parent1, magicCube parent2);
         void mutate(magicCube* child);
-        void go();
+        void go(int e);
         int bestIndividual();
+        double meanValues();
 };
 
 #endif

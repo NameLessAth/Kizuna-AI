@@ -5,11 +5,28 @@ class magicCube {
     public:
         // dibuat public karena siapa tau di algoritma tertentu perlu tau state nya buat diobrak abrik
         vector<int> state;
+        int value;
 
         magicCube(){
             for (int i = 1; i <= 125; i++) this->state.push_back(i);
             // janlup dirandom ygy
             random_shuffle(state.begin(), state.end());
+            this->value = this->countValue();
+        }
+
+        magicCube makeNeighbor(int i, int j) {
+            magicCube neighbor = magicCube();
+            vector<int> neighborState = this->state;
+            int temp = neighborState[j];
+            neighborState[j] = neighborState[i];
+            neighborState[i] = temp;
+            neighbor.switchStates(neighborState);
+            return neighbor;
+        }
+
+        void switchStates(vector<int> newState) {
+            this->state.swap(newState);
+            this->value = this->countValue();
         }
 
         int countValue(){

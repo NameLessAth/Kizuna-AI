@@ -75,10 +75,11 @@ class hillClimb {
             cout << "Nilai Akhir Objective Function : " << this->magiccube.value << endl;
             cout << "Durasi : " << duration.count() / 1000.0 << " seconds" << endl;
             cout << "Banyak Iterasi : " << iterasi << endl;
-
+            
+            cout << plot[0];
             for(int i=0;i<=iterasi;i++){
-                cout << i << "," << plot[i] << endl;
-            }
+                cout << "," << plot[i];
+            } cout << endl;
 
             // Delay
             system("pause");
@@ -136,9 +137,10 @@ class hillClimb {
             cout << "Durasi : " << duration.count() / 1000.0 << " seconds" << endl;
             cout << "Banyak Iterasi : " << iterasi << endl;
 
+            cout << plot[0];
             for(int i=0;i<=iterasi;i++){
-                cout << i << "," << plot[i] << endl;
-            }
+                cout << "," << plot[i];
+            } cout << endl;
 
             // Delay
             system("pause");
@@ -159,6 +161,7 @@ class hillClimb {
             for(restart=0;restart<maximumRestart;restart++){
                 // Generate random cube
                 random_shuffle(this->magiccube.state.begin(), this->magiccube.state.end());
+                this->magiccube.value = this->magiccube.countValue();
                 // Fungsi Steepest Ascent
                 int iterasii = 0;
                 vector<int> plottemp;
@@ -177,6 +180,12 @@ class hillClimb {
                 }
                 plot.push_back(plottemp);
                 iterasi.push_back(iterasii);
+                
+                cout << "iterasi ke-" << restart+1 << endl;
+                cout << plottemp[0];
+                for(int i=1;i<=iterasii;i++){
+                    cout << "," << plottemp[i];
+                } cout << endl;
 
                 if(maxvalue < this->magiccube.value){
                     maxvalue = this->magiccube.value;
@@ -258,9 +267,10 @@ class hillClimb {
             cout << "Durasi : " << duration.count() / 1000.0 << " seconds" << endl;
             cout << "Banyak Iterasi : " << iterasi << endl;
 
+            cout << plot[0];
             for(int i=0;i<=iterasi;i++){
-                cout << i << "," << plot[i] << endl;
-            }
+                cout << "," << plot[i];
+            } cout << endl;
 
             // Delay
             system("pause");

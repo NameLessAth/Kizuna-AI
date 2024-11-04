@@ -14,14 +14,24 @@ class magicCube {
             this->value = this->countValue();
         }
 
-        magicCube makeNeighbor(int i, int j) {
-            magicCube neighbor = magicCube();
+        magicCube(vector<int> state) {
+            this->state = state;
+            this->value = this->countValue();
+        }
+
+        vector<int> makeNeighborState(int num1, int num2) {
             vector<int> neighborState = this->state;
-            int temp = neighborState[j];
-            neighborState[j] = neighborState[i];
-            neighborState[i] = temp;
-            neighbor.switchStates(neighborState);
-            return neighbor;
+            int temp = neighborState[num1];
+            neighborState[num1] = neighborState[num2];
+            neighborState[num2] = temp;
+            return neighborState;
+        }
+
+        vector<int> makeRandomNeighborState() {
+            int num1 = rand() % 124;
+            int num2 = rand() % 124;
+            while (num1 == num2) num2 = rand() % 124;
+            return (this->makeNeighborState(num1, num2));
         }
 
         void switchStates(vector<int> newState) {

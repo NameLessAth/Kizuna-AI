@@ -24,7 +24,7 @@ public:
             temperature = schedule(t);  
             if (temperature <= 0) break;
 
-            magicCube successor;
+            magicCube successor = cube;
             successor.switchStates(cube.makeRandomNeighborState());
             int deltaE = successor.value - cube.value; 
 

@@ -19,7 +19,6 @@ public:
 
     void run(int maxIterations) {
 		iterasi = 0;
-		this->cube.value = cube.countValue();
 		plot.clear();
 		plot.push_back(cube.value);
         for (int t = 1; t <= maxIterations; ++t) {
@@ -31,8 +30,8 @@ public:
                 j = rand() % cube.state.size(); 
             }
 
-            magicCube successor = cube.makeNeighbor(i, j);
-			successor.value = cube.countValue();
+            magicCube successor;
+            successor.switchStates(cube.makeRandomNeighborState());
             int deltaE = successor.value - cube.value; 
 
             if (deltaE > 0) {
@@ -63,7 +62,7 @@ public:
             auto start = high_resolution_clock::now();
 
             // Fungsi Simulated-Annealing
-			this->run(100000);
+			this->run(10000);
 
             // Stop timer
             auto end = high_resolution_clock::now();

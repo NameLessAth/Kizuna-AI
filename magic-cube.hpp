@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <time.h>
 using namespace std;
 
 class magicCube {
@@ -10,6 +11,7 @@ class magicCube {
         magicCube(){
             for (int i = 1; i <= 125; i++) this->state.push_back(i);
             // janlup dirandom ygy
+            srand(time(nullptr));
             random_shuffle(state.begin(), state.end());
             this->value = this->countValue();
         }

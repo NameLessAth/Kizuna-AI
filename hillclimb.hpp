@@ -36,9 +36,6 @@ class hillClimb {
             // Generate random cube 
             random_shuffle(this->magiccube.state.begin(), this->magiccube.state.end());
 
-            // Clear terminal
-            system("cls");
-
             // Print state awal
             cout << "State Awal :\n";
             this->magiccube.printCube();
@@ -144,8 +141,76 @@ class hillClimb {
             system("pause");
         }
 
-        void randomRestart(){
+        void randomRestart(int maximumRestart){
+            int maxvalue = 0,restart;
+            vector<int> iterasi;
+            vector<vector<int>> plot;
 
+            // Print state awal
+            cout << "State Awal :\n";
+            this->magiccube.printCube();
+
+            // Start timer
+            auto start = high_resolution_clock::now();
+
+            for(restart=0;restart<maximumRestart;restart++){
+                // Generate random cube
+                random_shuffle(this->magiccube.state.begin(), this->magiccube.state.end());
+                // Fungsi Steepest Ascent
+                int iterasii = 0;
+                vector<int> plottemp;
+                plottemp.clear();
+                bool peak = false;
+                plottemp.push_back(this->magiccube.value);
+                while(!peak){
+                    magicCube neighbor = highestValueNeighbor(this->magiccube);
+                    if(neighbor.value <= this->magiccube.value){
+                        peak = true;
+                    } else {
+                        this->magiccube = neighbor;
+                    }
+                    iterasii++;
+                    plottemp.push_back(this->magiccube.value);
+                }
+                plot.push_back(plottemp);
+                iterasi.push_back(iterasii);
+
+                if(maxvalue < this->magiccube.value){
+                    maxvalue = this->magiccube.value;
+                }
+            }
+
+            // Stop timer
+            auto end = high_resolution_clock::now();
+
+            // Hitung waktu
+            auto duration = duration_cast<milliseconds>(end - start);
+
+            // Print state akhir
+            cout << "State Akhir :\n";
+            this->magiccube.printCube();
+
+            // Print info
+            cout << "Nilai Akhir Objective Function : " << this->magiccube.value << endl;
+            cout << "Durasi : " << duration.count() / 1000.0 << " seconds" << endl;
+            cout << "Iterasi per restart :\n";
+            for(int i=0;i<restart;i++){
+                cout << "restart-" << i+1 << " : " << iterasi[i] << endl;
+            }
+
+            for(int i=0;i<restart;i++){
+                cout << "restart-" << i+1 << endl;
+                int j=0;
+                for(int plotting : plot[i]){
+                    cout << "iterasi-" << j << " : " << plotting << endl;
+                    j++;
+                }
+            }
+
+            cout << "Maximum value : " << maxvalue << endl;
+
+            // Delay
+            system("pause");
         }
 
         void stochastic(){

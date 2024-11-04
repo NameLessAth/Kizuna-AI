@@ -20,7 +20,9 @@ int main(){
             hillclimb.sideWays(param);
             break;
         case 3:
-            hillclimb.randomRestart();
+            cout << "Masukkan banyak maksimum restart : ";
+            cin >> param;
+            hillclimb.randomRestart(param);
             break;
         case 4:
             hillclimb.stochastic();

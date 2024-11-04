@@ -16,6 +16,18 @@ class magicCube {
             this->value = this->countValue();
         }
 
+        magicCube& operator=(const magicCube& other) {
+            if (this != &other) {
+                state = other.state;
+                value = other.value;
+            }
+            return *this;
+        }
+
+        bool operator==(const magicCube& other) const {
+            return (state == other.state && value == other.value);
+        }
+
         magicCube makeNeighbor(int i, int j) {
             magicCube neighbor = magicCube();
             vector<int> neighborState = this->state;

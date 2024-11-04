@@ -28,14 +28,24 @@ class magicCube {
             return (state == other.state && value == other.value);
         }
 
-        magicCube makeNeighbor(int i, int j) {
-            magicCube neighbor = magicCube();
+        magicCube(vector<int> state) {
+            this->state = state;
+            this->value = this->countValue();
+        }
+
+        vector<int> makeNeighborState(int num1, int num2) {
             vector<int> neighborState = this->state;
-            int temp = neighborState[j];
-            neighborState[j] = neighborState[i];
-            neighborState[i] = temp;
-            neighbor.switchStates(neighborState);
-            return neighbor;
+            int temp = neighborState[num1];
+            neighborState[num1] = neighborState[num2];
+            neighborState[num2] = temp;
+            return neighborState;
+        }
+
+        vector<int> makeRandomNeighborState() {
+            int num1 = rand() % 124;
+            int num2 = rand() % 124;
+            while (num1 == num2) num2 = rand() % 124;
+            return (this->makeNeighborState(num1, num2));
         }
 
         void switchStates(vector<int> newState) {
@@ -45,8 +55,9 @@ class magicCube {
 
         int countValue(){
             int count = 0;
+            map<int, int> hasil;
 
-            // bidang XY
+            // bidang XY (tiang X sama tiang Y)
             for (int z = 0; z < 5; z++) {
                 for (int y = 0; y < 5; y++) {
                     int row_sum = 0;
@@ -55,38 +66,21 @@ class magicCube {
                         row_sum += state[z * 5 * 5 + y * 5 + x];
                         col_sum += state[z * 5 * 5 + x * 5 + y]; 
                     }
-                    if (row_sum == 315) count++;
-                    if (col_sum == 315) count++;
+                    hasil[row_sum]++;
+                    hasil[col_sum]++;
                 }
-            }
+            } 
 
-            // bidang XZ
+            // bidang XZ (tiang Z)
             for (int y = 0; y < 5; y++) {
                 for (int x = 0; x < 5; x++) {
-                    int row_sum = 0;
-                    int col_sum = 0;
+                    int z_sum = 0;
                     for (int z = 0; z < 5; z++) {
-                        row_sum += state[z * 5 * 5 + y * 5 + x];
-                        col_sum += state[x * 5 * 5 + y * 5 + z];
+                        z_sum += state[z * 5 * 5 + y * 5 + x]; 
                     }
-                    if (row_sum == 315) count++;
-                    if (col_sum == 315) count++;
+                    hasil[z_sum]++;
                 } 
-            }
-
-            // bidang YZ
-            for (int x = 0; x < 5; x++) {
-                for (int z = 0; z < 5; z++) {
-                    int row_sum = 0;
-                    int col_sum = 0;
-                    for (int y = 0; y < 5; y++) {
-                        row_sum += state[z * 5 * 5 + y * 5 + x]; 
-                        col_sum += state[x * 5 * 5 + z * 5 + y]; 
-                    }
-                    if (row_sum == 315) count++;
-                    if (col_sum == 315) count++;
-                }
-            }
+            } 
 
             // diag XY
             for (int z = 0; z < 5; z++) {
@@ -96,9 +90,9 @@ class magicCube {
                     diag1_sum += state[z * 5 * 5 + i * 5 + i];           
                     diag2_sum += state[z * 5 * 5 + i * 5 + (5 - 1 - i)]; 
                 }
-                if (diag1_sum == 315) count++;
-                if (diag2_sum == 315) count++;
-            }
+                hasil[diag1_sum]++;
+                hasil[diag2_sum]++;
+            } 
 
             // diag XZ
             for (int y = 0; y < 5; y++) {
@@ -108,9 +102,9 @@ class magicCube {
                     diag1_sum += state[i * 5 * 5 + y * 5 + i];           
                     diag2_sum += state[(5 - 1 - i) * 5 * 5 + y * 5 + i]; 
                 }
-                if (diag1_sum == 315) count++;
-                if (diag2_sum == 315) count++;
-            }
+                hasil[diag1_sum]++;
+                hasil[diag2_sum]++;
+            } 
 
             // diag YZ
             for (int x = 0; x < 5; x++) {
@@ -120,9 +114,9 @@ class magicCube {
                     diag1_sum += state[i * 5 * 5 + i * 5 + x];           
                     diag2_sum += state[(5 - 1 - i) * 5 * 5 + i * 5 + x]; 
                 }
-                if (diag1_sum == 315) count++;
-                if (diag2_sum == 315) count++;
-            }
+                hasil[diag1_sum]++;
+                hasil[diag2_sum]++;
+            } 
 
             // 3d diag
             int diag3D1 = 0, diag3D2 = 0, diag3D3 = 0, diag3D4 = 0;
@@ -132,11 +126,13 @@ class magicCube {
                 diag3D3 += state[i * 5 * 5 + (5 - 1 - i) * 5 + i];        // (0,4,0) to (4,0,4)
                 diag3D4 += state[(5 - 1 - i) * 5 * 5 + i * 5 + i];        // (4,0,0) to (0,4,4)
             }
-            if (diag3D1 == 315) count++;
-            if (diag3D2 == 315) count++;
-            if (diag3D3 == 315) count++;
-            if (diag3D4 == 315) count++;
+            hasil[diag3D1]++;
+            hasil[diag3D2]++;
+            hasil[diag3D3]++;
+            hasil[diag3D4]++;
 
+            for (const auto& pair : hasil) if (pair.second > count) count = pair.second;
+            
             return count;
         }
 

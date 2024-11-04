@@ -20,6 +20,7 @@ class hillClimb {
                     swap(successor[i], successor[j]);
                     temp.state = successor;
                     curvalue = temp.countValue();
+                    temp.value = curvalue;
                     if(temp.countValue() > maxvalue){
                         maxvalue = curvalue;
                         neighbor = temp;
@@ -35,6 +36,7 @@ class hillClimb {
         void steepestAscent(){
             // Generate random cube 
             random_shuffle(this->magiccube.state.begin(), this->magiccube.state.end());
+            this->magiccube.value = this->magiccube.countValue();
 
             // Print state awal
             cout << "State Awal :\n";
@@ -85,6 +87,7 @@ class hillClimb {
         void sideWays(int maximumSidewaysMove){
             // Generate random cube 
             random_shuffle(this->magiccube.state.begin(), this->magiccube.state.end());
+            this->magiccube.value = this->magiccube.countValue();
 
             // Print state awal
             cout << "State Awal :\n";
